@@ -1,6 +1,0 @@
-Log ID|Statement|Expected Result|Actual Result|Status|Comment|Timestamp
-1|System Generated Error.. Message from Perl:Can't modify non-lvalue subroutine call at USF.pm line 116.
-|Unknown Expected Result|System Error|ERROR|Problem sub-procedure:Test_Framework|Thu Mar 26 20:22:33 2015
-Log ID|Statement|Expected Result|Actual Result|Status|Comment|Timestamp
-1|Log file at:/home/applegate/bz_main/code/usf/perl/|Save log statements to a .csv file||TEST|TestCode_E|Sat May 23 08:22:12 2015
-2|Getting data from:/home/applegate/bz_main/code/usf/perl/|Read every line from .csv file||TEST|TestCode_E|Sat May 23 08:22:12 2015
