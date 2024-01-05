@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright2010,2014,2019,2020,2023,2024 Brian J. Zeien
+# Copyright 2010,2014,2019,2020,2023,2024 Brian J. Zeien
 
 # This file is part of Universal Software Framework (a.k.a USF).
 
