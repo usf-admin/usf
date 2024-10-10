@@ -19,30 +19,56 @@
 
 package USF;
 use strict;
+use Cwd;
 
 sub new {
 
 	my $usf = {};
-	$usf->{FILE_DATA} = "";
-	$usf->{FILE_LOG} = "";
+	my($path_filename, $path_dirs, $path_suffix) = File::Basename::fileparse(Cwd::abs_path(__FILE__));
+	$usf->{DEFAULT_FILENAME_CONFIG} = "usf.conf";
+	$usf->{RELATIVE_FILE_DIRECTORY} = $path_dirs;
+	$usf->{FILEPATH_CONFIG} = "";
+	$usf->{FILEPATH_DATA} = "";
+	$usf->{FILEPATH_LOG} = "";
 	$usf->{ID_LOG} = 0;
 	$usf->{DELIMITER_LOG} = ",";
 	bless($usf);
 	return $usf;
 }
 
-sub file_data {
+sub default_filename_config {
 
 	my $usf = shift;
-	if (@_) { $usf->{FILE_DATA} = shift }
-	return $usf->{FILE_DATA};
+	if (@_) { $usf->{DEFAULT_FILENAME_CONFIG} = shift }
+	return $usf->{DEFAULT_FILENAME_CONFIG};
 }
 
-sub file_log {
+sub relative_file_directory {
 
 	my $usf = shift;
-	if (@_) { $usf->{FILE_LOG} = shift }
-	return $usf->{FILE_LOG};
+	if (@_) { $usf->{RELATIVE_FILE_DIRECTORY} = shift }
+	return $usf->{RELATIVE_FILE_DIRECTORY};
+}
+
+sub filepath_config {
+
+	my $usf = shift;
+	if (@_) { $usf->{FILEPATH_CONFIG} = shift }
+	return $usf->{FILEPATH_CONFIG};
+}
+
+sub filepath_data {
+
+	my $usf = shift;
+	if (@_) { $usf->{FILEPATH_DATA} = shift }
+	return $usf->{FILEPATH_DATA};
+}
+
+sub filepath_log {
+
+	my $usf = shift;
+	if (@_) { $usf->{FILEPATH_LOG} = shift }
+	return $usf->{FILEPATH_LOG};
 }
 
 sub delimiter_log {
@@ -70,7 +96,7 @@ sub HandleError {
 					$problem_sub . $usf->delimiter_log . 
 					$problem_description;
 
-	if ($problem_sub ne "Log") {
+	if ($problem_sub ne "Log" || $problem_sub ne "HandleArguments" || $problem_sub ne "Setup") {
 
 		$usf->Log($statement); 
 
@@ -109,7 +135,7 @@ sub Log {
 
 	my $usf = shift;
 	my $statement = $_[0];
-	my $path = $usf->file_log;
+	my $path = $usf->filepath_log;
 	my $id_log = ($usf->id_log + 1);	
 
 	chomp($statement);
@@ -124,12 +150,12 @@ sub Log {
 	
 			} else {
 		
-				print "Unable to open log file: " . $path . "\n";
+				$usf->HandleError(0, "Log", ("Unable to open log file: " . $path));
 				return 0;
 			}
 			close(LOGFILE);
 
-		}; if ($@) { $usf->HandleError(0,"Log",$@); }
+		}; if ($@) { $usf->HandleError(0, "Log", $@); }
 	}	
 
 	print $statement . "\n";
@@ -146,7 +172,7 @@ sub GetData {
 
 	if(!$usf->VerifyFileExists($path)) {
 
-		print "Data file " . $path . " not found." . "\n";
+		$usf->HandleError(0, "GetData", "Invalid data file path.");
 		return @return_array;
 	}
 	
@@ -162,12 +188,91 @@ sub GetData {
 
 	} else {
 		
-		print "Unable to open data file: " . $path . "\n";
+		$usf->HandleError(0, "GetData", "Unable to open data file.");
 		return @return_array;
 	}
 
 	close(DATAFILE);
 	return @return_array;
 }
-1;
 
+sub HandleArguments {
+	
+	my $usf = shift;
+	my @argv_list = @{$_[0]};
+	
+	if((scalar @argv_list) > 0) {
+		
+		if($usf->VerifyFileExists($argv_list[0])) {
+			
+			$usf->filepath_config($argv_list[0]);
+			return 0;
+		
+		} else { 
+			
+			$usf->HandleError(0, "HandleArguments", "Configuration file does not exist on absolute path: " . $argv_list[0]);
+			return 1;
+		}
+		
+	} else {
+				
+		# With non-unix remember to set $volume parameter for catpath appropriately ("C:", "D:", etc)
+		my $relative_filepath_config = File::Spec->catpath("", $usf->relative_file_directory(), $usf->default_filename_config());
+		
+		if($usf->VerifyFileExists($relative_filepath_config)) {
+			
+			$usf->filepath_config($relative_filepath_config);
+			return 0;
+		
+		} else { 
+			
+			$usf->HandleError(0, "HandleArguments", "Configuration file does not exist on relative path: " . $relative_filepath_config);
+			return 1;
+		}		
+	}
+	
+	print "usage: python main.py [filepath]\n";
+	return 1;		
+}
+
+sub setup {
+
+	my $usf = shift;
+	my @array_config;
+	my $count_lines_config = 0;
+	my @properties;
+	my $map_config = {};
+		
+	@array_config = $usf->GetData($usf->filepath_config());
+	$count_lines_config = scalar @array_config;
+
+	if($count_lines_config > 0) {
+
+		for(my $counter = 0; $counter < @array_config; $counter++) {
+
+			if($array_config[$counter] ne "") {
+
+				my(@chars_properties) = split //,$array_config[$counter];
+
+				if($chars_properties[0] ne "#") {
+
+					@properties = split /=/, $array_config[$counter];
+
+					$map_config->{$properties[0]} = $properties[1];
+				}
+			}
+		}
+
+		$usf->filepath_log($map_config->{file_log});
+		$usf->id_log(0);
+		$usf->delimiter_log($map_config->{delimiter_log});
+		$usf->filepath_data($map_config->{file_data});
+		return 0;		
+
+	} else {
+		
+		$usf->HandleError(0, "setup", ("Empty config file: " . $usf->filepath_config() . "\n"));
+		return 1;
+	}
+}
+1;
