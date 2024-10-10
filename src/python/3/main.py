@@ -21,62 +21,27 @@ from USF import *
 
 framework = USF()
 
-file_config = "/home/user1/code/usf/src/python/3/main.conf"
-array_config = []
-map_config = {}
+def main():
+	
+	if framework.HandleArguments(argv_list=sys.argv) == 0:
 
-def setup():
+		if framework.Setup() == 0:
 
-	try:
+			framework.Log(("Getting data from file: " + framework.Get_FilepathData()));
+			    
+			data = framework.GetData(framework.Get_FilepathData())
+			
+			for line in data:
+				framework.Log(line.rstrip('\r\n'))
 
-		array_config = framework.GetData(file_config)
-		count_lines_config = len(array_config)
-
-		if count_lines_config > 0:
-
-			for line in array_config:
-
-				if line != "":
-
-					chars_properties = list(line)
-
-					if chars_properties[0] != "#":
-
-						properties = line.split("=")
-						map_config[properties[0]] = properties[1].rstrip('\r\n')
-
-			framework.Set_FileLog(map_config['file_log'])
-			framework.Set_IdLog(0);
-			framework.Set_DelimiterLog(map_config['delimiter_log']);
-			framework.Set_FileData(map_config['file_data']);
+			return 0
 
 		else:
 
-			print("Empty config file: " + file_config)
+			framework.HandleError(0, "main", "Setup failed.")
 			return 1
-
-	except:
-
-		ex = sys.exc_info() [0]
-		framework.HandleError(0, "main.py->setup()", "%s" % ex)
-		return 1
-
-	return 0
-
-def main():
-
-	if setup() == 0:
-
-		framework.Log(("Getting data from file: " + framework.Get_FileData()));
-		data = framework.GetData(framework.Get_FileData())
-		for line in data:
-			framework.Log(line.rstrip('\r\n'))
-
-		return 0
-
-	else:
-
-		print("Setup failed")
+			
+	else:		
 		return 1
 
 main()

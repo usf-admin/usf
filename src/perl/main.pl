@@ -19,69 +19,34 @@
 
 use strict;
 use USF;
+use File::Basename;
+use File::Spec;
 
 my $framework = USF->new();
 
-my $file_config = "/home/user1/code/usf/src/perl/main.conf";
-my @array_config;
-my $map_config = {};
-
 main();
 
-sub setup {
-
-	my @properties;
-	my $count_lines_config = 0;
-
-	@array_config = $framework->GetData($file_config);
-	$count_lines_config = scalar @array_config;
-
-	if($count_lines_config > 0) {
-
-		for(my $counter = 0; $counter < @array_config; $counter++) {
-
-			if($array_config[$counter] ne "") {
-
-				my(@chars_properties) = split //,$array_config[$counter];
-
-				if($chars_properties[0] ne "#") {
-
-					@properties = split /=/, $array_config[$counter];
-
-					$map_config->{$properties[0]} = $properties[1];
-				}
-			}
-		}
-
-		$framework->file_log($map_config->{file_log});
-		$framework->id_log(0);
-		$framework->delimiter_log($map_config->{delimiter_log});
-		$framework->file_data($map_config->{file_data});
-		return 0;		
-
-	} else {
-
-		print "Empty config file: " . $file_config . "\n";
-		return 1;
-	}
-}
-
 sub main {
-
-	my($rv_setup) = setup();
-	if($rv_setup == 0) {
-
-		$framework->Log(("Getting data from file: " . $framework->file_data()));
-		my (@data) = $framework->GetData($framework->file_data());
-		foreach (@data) {
-			$framework->Log($_);
-		}
-
-		return 0;
 	
-	} else {
+	if($framework->HandleArguments(\@ARGV) == 0) {
+		
+		if($framework->setup() == 0) {
 
-		print "Setup failed.\n";
+			$framework->Log(("Getting data from file: " . $framework->filepath_data()));
+			my (@data) = $framework->GetData($framework->filepath_data());
+			foreach (@data) {
+				$framework->Log($_);
+			}
+
+			return 0;
+		
+		} else {
+
+			$framework->HandleError(0, "main", "Setup failed.");
+			return 1;
+		}
+	
+	} else {		
 		return 1;
 	}
 }
