@@ -1,0 +1,8 @@
+Tested versions:
+
+g++ (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609 on Trisquel 8.0
+
+Usage:
+
+g++ -Wall -g usf.cpp main.cpp -o test_framework
+./test_framework
