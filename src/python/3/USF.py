@@ -25,8 +25,8 @@ class USF:
 
 	def __init__(self):
 		
-		self.relative_file_directory = os.path.dirname(os.path.abspath(__file__))
 		self.default_filename_config = "usf.conf"
+		self.relative_file_directory = os.path.dirname(os.path.abspath(__file__))
 		self.filepath_config = ""
 		self.filepath_data = ""
 		self.filepath_log = ""
@@ -170,12 +170,12 @@ class USF:
 
 		try:
 			
-			array_config = []
+			array_config = []			
 			map_config = {}		
 								
 			array_config = self.GetData(self.Get_FilepathConfig())
 			count_lines_config = len(array_config)
-
+			
 			if count_lines_config > 0:
 
 				for line in array_config:
