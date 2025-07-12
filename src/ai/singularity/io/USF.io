@@ -22,7 +22,7 @@ USF:USF;
 def Log(
 	log_statement
 ) {
-	:
+	~
 		# ADD CODE HERE	
 		ret 0;
 	~->err
@@ -35,7 +35,7 @@ def HandleError(
 	problem_sub, 
 	problem_description
 ) {
-	:
+	~
 		# ADD CODE HERE	
 		ret 0;
 	~->err
