@@ -6,7 +6,7 @@
 
 	../chatgpt/rust
 	../copilot/java
-	../singularity/io
+	../singularity/sin
 	
 ---
 	
@@ -16,6 +16,6 @@
 
 	../chatgpt/rust/web_server
 	../copilot/java/port_scanner
-	../singularity/io/temporal_displacement
+	../singularity/sin/temporal_displacement
 
 ---

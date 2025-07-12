@@ -1,7 +1,0 @@
-Tested with versions:
-
-io 0.0.1 (default, Oct 20 2024, 00:00:01) [IOC 0.0.1 20241020] on linux
-
-Usage:
-
-user@domain$ io temporal_displacement.io

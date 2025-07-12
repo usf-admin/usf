@@ -50,10 +50,10 @@ along with USF.  If not, see <http://www.gnu.org/licenses/>.*/
 ## approximately 8 kiloparsecs (26000 ly) away from Earth
 #! at Galactic Coordinates 17h 45m 40.0409s,-29 degrees 00' 28.118.
 
-->lib:io:default:Observer
-->lib:io:default:Time
-->lib:io:default:Location
-->lib:io:USF
+->lib:sin:default:Observer
+->lib:sin:default:Time
+->lib:sin:default:Location
+->lib:sin:USF
 
 framework:USF;
 
