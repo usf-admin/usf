@@ -1,0 +1,1211 @@
+/* Copyright 2024-2026 Brian J. Zeien
+
+This file is part of Universal Software Framework (a.k.a USF).
+
+USF is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+USF is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with USF.  If not, see <http://www.gnu.org/licenses/>.*/
+
+#! Temporal Displacement Runtime Implementation
+##
+## ReferenceDefinition:
+##   Implements the TemporalDisplacement abstraction for this program.
+##
+## HumanModel:
+##   This program creates, validates, and executes Observer state
+##   transitions according to the TemporalDisplacement contract.
+!#
+
+#! Observer Initial State Validation
+##
+## ReferenceDefinition:
+##   Validates that the Observer state at program initialization
+##   satisfies the required Observer State Model.
+##
+## ExpectedBehavior:
+##   Invalid initial state prevents displacement execution.
+!#
+
+#! Speed of light in vacuum - Physical Constant
+## Symbol: c
+##
+## ReferenceDefinition:
+##   A physical constant representing the invariant speed at which
+##   electromagnetic radiation propagates through a vacuum.
+##
+## HumanModel:
+##   The speed of light in vacuum is represented as a fixed physical
+##   constant used as a fundamental relationship between distance and
+##   time measurements.
+##
+## HumanDeclaredReality:
+##   The speed of light in vacuum is a constant value exactly equal to
+##   299,792,458 meters per second.
+##
+## ExpectedState:
+##   MeasurementType:
+##     Velocity
+##
+##   ReferenceSystem:
+##     International System of Units (SI)
+##
+##   ReferenceMedium:
+##     Vacuum
+##
+##   DistanceUnit:
+##     Meter
+##
+##   TimeUnit:
+##     Second
+##
+##   Value:
+##     299,792,458 meters per second
+##
+##   Definition:
+##     The distance traveled by light in vacuum during one second.
+##
+## VerificationRequirements:
+##   Evidence:
+##     Verification must be based on independently observable and
+##     measurable physical evidence concerning the propagation of
+##     electromagnetic radiation through vacuum and its relationship
+##     between distance and elapsed time.
+##
+##   ReferenceIntegrity:
+##     The reference system, distance unit, time unit, and physical
+##     conditions used to determine or realize the speed of light
+##     must be established independently of the value being verified.
+##
+##   MeasurementIntegrity:
+##     Evidence used to determine or realize the speed of light must
+##     not be altered by the entity or process whose measurement is
+##     being verified.
+##
+##   Assumptions:
+##     Assumptions used to determine or realize the speed of light
+##     must be explicitly identified.
+##
+##   Inference:
+##     The verification process must provide the reasoning basis used
+##     to determine the speed of light from the available evidence,
+##     reference definitions, and assumptions.
+##
+##   MeasurementConfidence:
+##     When the physical realization or independent measurement of the
+##     speed of light cannot be established directly, the verification
+##     process may provide a probability representing the estimated
+##     likelihood that the measured or realized value corresponds to
+##     the defined physical constant.
+##
+##   Uncertainty:
+##     Uncertainty affecting the measurement or physical realization
+##     of the speed of light must be explicitly identified.
+##
+##   AlternativeMeasurements:
+##     Physically plausible alternative interpretations of the
+##     available electromagnetic, spatial, or temporal evidence must
+##     be identified and considered where applicable.
+##
+##   IndistinguishableMeasurements:
+##     If two or more physically distinct measurement conditions
+##     produce no physically observable distinction within the
+##     available evidence, verification must not represent the value
+##     as certain solely because one interpretation is preferred by
+##     the inference model.
+##
+##   VerificationFailure:
+##     If the available evidence cannot establish the measurement or
+##     physical realization of the speed of light with sufficient
+##     justification, verification must report the unresolved
+##     measurement rather than represent the value as established.
+##
+## Precision:
+##   exact
+##
+## VerificationTolerance:
+##   0.00%
+!#
+
+#! Meter - Unit of Length
+## Symbol: m
+##
+## ReferenceDefinition:
+##   A base unit of length measurement defined as the length of the
+##   path traveled by light in vacuum during the time interval of
+##   1/299,792,458 of a second.
+##
+## HumanModel:
+##   A Meter is represented as a fixed length unit derived from the
+##   fixed speed of light in vacuum and the defined duration of one
+##   Second.
+##
+## HumanDeclaredReality:
+##   The meter is the length of the path traveled by light in vacuum
+##   during 1/299,792,458 of a second.
+##
+## ExpectedState:
+##   MeasurementType:
+##     Length
+##
+##   ReferenceSystem:
+##     International System of Units (SI)
+##
+##   ReferenceMedium:
+##     Vacuum
+##
+##   ReferenceEntity:
+##     Light
+##
+##   ReferenceSpeed:
+##     SpeedOfLight
+##
+##   ReferenceDuration:
+##     1/299,792,458 second
+##
+##   Definition:
+##     One meter corresponds to the distance traveled by light in
+##     vacuum during the specified fraction of one second.
+##
+## VerificationRequirements:
+##   Evidence:
+##     Verification must be based on independently observable and
+##     measurable evidence of the defined speed of light in vacuum
+##     and the defined temporal interval.
+##
+##   ReferenceIntegrity:
+##     The reference system, reference medium, reference speed, and
+##     reference duration used to determine the Meter must be
+##     established independently of the length measurement being
+##     verified.
+##
+##   MeasurementIntegrity:
+##     Evidence used to determine the Meter must not be altered by
+##     the entity or process whose length measurement is being verified.
+##
+##   Assumptions:
+##     Assumptions used to determine or realize the Meter must be
+##     explicitly identified.
+##
+##   Inference:
+##     The verification process must provide the reasoning basis used
+##     to determine the Meter from the available evidence, reference
+##     definitions, and assumptions.
+##
+##   MeasurementConfidence:
+##     When the realization of the Meter cannot be established
+##     directly, the verification process may provide a probability
+##     representing the estimated likelihood that the measured or
+##     realized length corresponds to the defined Meter.
+##
+##   Uncertainty:
+##     Uncertainty affecting the realization or measurement of the
+##     Meter must be explicitly identified.
+##
+##   AlternativeMeasurements:
+##     Physically plausible alternative interpretations of the
+##     available optical, spatial, or temporal evidence must be
+##     identified and considered where applicable.
+##
+##   IndistinguishableMeasurements:
+##     If two or more physically distinct length states or measurement
+##     conditions produce no physically observable distinction within
+##     the available evidence, verification must not represent the
+##     Meter realization as certain solely because one interpretation
+##     is preferred by the inference model.
+##
+##   VerificationFailure:
+##     If the available evidence cannot establish the realization or
+##     measurement of the Meter with sufficient justification,
+##     verification must report the unresolved measurement rather than
+##     represent the value as established.
+##
+## Precision:
+##   exact
+##
+## VerificationTolerance:
+##   0.00%
+!#
+
+#! Second - Unit of Time
+## Symbol: s
+##
+## ReferenceDefinition:
+##   A base unit of time measurement defined by the fixed numerical
+##   value of the cesium frequency, the unperturbed ground-state
+##   hyperfine transition frequency of the cesium-133 atom.
+##
+## HumanModel:
+##   A Second is represented as a fixed interval of time established
+##   through a physical atomic transition frequency and used as the
+##   fundamental unit for measuring elapsed time.
+##
+## HumanDeclaredReality:
+##   The second is defined by taking the fixed numerical value of the
+##   cesium frequency, the unperturbed ground-state hyperfine transition
+##   frequency of the cesium-133 atom, to be 9,192,631,770 when expressed
+##   in the unit Hz.
+##
+## ExpectedState:
+##   MeasurementType:
+##     Time
+##
+##   ReferenceSystem:
+##     International System of Units (SI)
+##
+##   ReferenceAtom:
+##     Cesium-133
+##
+##   ReferenceTransition:
+##     Unperturbed ground-state hyperfine transition frequency
+##
+##   Frequency:
+##     9,192,631,770 Hz
+##
+##   Definition:
+##     One second corresponds to the duration of
+##     9,192,631,770 cycles of the specified cesium-133 transition.
+##
+## VerificationRequirements:
+##   Evidence:
+##     Verification must be based on independently observable and
+##     measurable evidence of the defined cesium-133 reference
+##     transition and its relationship to the defined time interval.
+##
+##   ReferenceIntegrity:
+##     The reference system, reference atom, reference transition,
+##     and fixed frequency value used to determine the Second must be
+##     established independently of the time measurement being verified.
+##
+##   MeasurementIntegrity:
+##     Evidence used to determine the Second must not be altered by
+##     the entity or process whose temporal measurement is being verified.
+##
+##   Assumptions:
+##     Assumptions used to determine or realize the Second must be
+##     explicitly identified.
+##
+##   Inference:
+##     The verification process must provide the reasoning basis used
+##     to determine the Second from the available evidence, reference
+##     definitions, and assumptions.
+##
+##   MeasurementConfidence:
+##     When the realization of the Second cannot be established
+##     directly, the verification process may provide a probability
+##     representing the estimated likelihood that the measured or
+##     realized interval corresponds to the defined Second.
+##
+##   Uncertainty:
+##     Uncertainty affecting the realization or measurement of the
+##     Second must be explicitly identified.
+##
+##   AlternativeMeasurements:
+##     Physically plausible alternative interpretations of the
+##     available atomic-frequency or temporal evidence must be
+##     identified and considered where applicable.
+##
+##   IndistinguishableMeasurements:
+##     If two or more physically distinct temporal states or
+##     measurement conditions produce no physically observable
+##     distinction within the available evidence, verification must
+##     not represent the realization of the Second as certain solely
+##     because one interpretation is preferred by the inference model.
+##
+##   VerificationFailure:
+##     If the available evidence cannot establish the realization or
+##     measurement of the Second with sufficient justification,
+##     verification must report the unresolved measurement rather than
+##     represent the value as established.
+##
+## Precision:
+##   exact
+##
+## VerificationTolerance:
+##   0.00%
+!#
+
+#! Light Year - Distance Measurement
+## Symbol: ly
+##
+## ReferenceDefinition:
+##   A unit of distance measurement representing the distance a beam
+##   of light travels through vacuum during one Earth year.
+##
+## HumanModel:
+##   A Light Year is represented as a fixed astronomical distance unit
+##   derived from the speed of light in vacuum and the defined duration
+##   of one Earth year.
+##
+## HumanDeclaredReality:
+##   A light-year is the distance light travels through vacuum during
+##   one Earth year. The resulting distance is approximately
+##   9.46073 x 10^12 km (approximately 6 trillion miles).
+##
+## ExpectedState:
+##   MeasurementType:
+##     Distance
+##
+##   ReferenceMedium:
+##     Light propagation through vacuum
+##
+##   ReferenceDuration:
+##     One Earth year
+##
+##   ReferenceVelocity:
+##     Speed of light in vacuum
+##
+##   Distance:
+##     9.46073 x 10^12 km
+##
+##   EquivalentDistance:
+##     Approximately 6 trillion miles
+##
+## VerificationRequirements:
+##   Evidence:
+##     Verification must be based on independently established
+##     physical and mathematical definitions of the speed of light
+##     in vacuum and the reference duration defining one Earth year.
+##
+##   ReferenceIntegrity:
+##     The reference velocity, reference duration, and reference
+##     conditions used to determine the Light Year must be established
+##     independently of the distance value being verified.
+##
+##   MeasurementIntegrity:
+##     The evidence used to determine the Light Year must not be
+##     altered by the entity or process whose measurement is being
+##     verified.
+##
+##   Assumptions:
+##     Assumptions used to determine the Light Year must be
+##     explicitly identified.
+##
+##   Inference:
+##     The verification process must provide the reasoning basis used
+##     to determine the Light Year from the available evidence,
+##     definitions, and assumptions.
+##
+##   MeasurementConfidence:
+##     When the Light Year value cannot be established directly,
+##     the verification process may provide a probability representing
+##     the estimated likelihood that the measured or calculated value
+##     is correct.
+##
+##   Uncertainty:
+##     Uncertainty affecting the Light Year determination must be
+##     explicitly identified.
+##
+##   AlternativeMeasurements:
+##     Physically plausible alternative interpretations of the
+##     available physical or temporal evidence must be identified and
+##     considered where applicable.
+##
+##   IndistinguishableMeasurements:
+##     If two or more physically distinct interpretations produce no
+##     physically observable distinction within the available
+##     evidence, verification must not represent the Light Year value
+##     as certain solely because one interpretation is preferred by
+##     the inference model.
+##
+##   VerificationFailure:
+##     If the available evidence cannot establish the Light Year value
+##     with sufficient justification, verification must report the
+##     unresolved measurement rather than represent the value as
+##     established.
+##
+## Precision:
+##   exact
+##
+## VerificationTolerance:
+##   0.00%
+!#
+
+#! Epoch Time - Unit of Time Measurement
+## Symbol: et
+##
+## ReferenceDefinition:
+##   A unit of time measurement representing the total number of
+##   non-leap seconds elapsed since the Unix epoch at 00:00:00 UTC
+##   January 1, 1970.
+##
+## HumanModel:
+##   Epoch Time is represented as a numerical measurement of elapsed
+##   time relative to a fixed temporal reference point.
+##
+## HumanDeclaredReality:
+##   The total number of non-leap seconds having elapsed since the
+##   Unix epoch on 00:00:00 UTC January 1, 1970.
+##
+## ExpectedState:
+##   ReferencePoint:
+##     UnixEpoch
+##
+##   ReferenceTime:
+##     00:00:00 UTC January 1, 1970
+##
+##   Measurement:
+##     NonLeapSecondsElapsed
+##
+##   Value:
+##     Integer count of elapsed seconds
+##
+## VerificationRequirements:
+##   Evidence:
+##     Verification must be based on independently measurable
+##     temporal evidence relative to the defined reference point.
+##
+##   ReferenceIntegrity:
+##     The reference point and reference time used for verification
+##     must be established independently of the value being verified.
+##
+##   MeasurementIntegrity:
+##     The evidence used to determine Epoch Time must not be altered
+##     by the entity or process whose temporal state is being measured.
+##
+##   Assumptions:
+##     Assumptions used to determine the Epoch Time value must be
+##     explicitly identified.
+##
+##   Inference:
+##     The verification process must provide the reasoning basis used
+##     to determine the Epoch Time value from the available evidence
+##     and assumptions.
+##
+##   MeasurementConfidence:
+##     When the exact Epoch Time value cannot be established directly,
+##     the verification process may provide a probability representing
+##     the estimated likelihood that the measured value is correct.
+##
+##   Uncertainty:
+##     Uncertainty affecting the Epoch Time measurement must be
+##     explicitly identified.
+##
+##   AlternativeMeasurements:
+##     Physically plausible alternative interpretations of the
+##     available temporal evidence must be identified and considered
+##     where applicable.
+##
+##   IndistinguishableMeasurements:
+##     If two or more physically distinct temporal states produce no
+##     physically observable distinction within the available
+##     evidence, verification must not represent the Epoch Time value
+##     as certain solely because one interpretation is preferred by
+##     the inference model.
+##
+##   VerificationFailure:
+##     If the available evidence cannot establish the Epoch Time value
+##     with sufficient justification, verification must report the
+##     unresolved measurement rather than represent the value as
+##     established.
+##
+## Precision:
+##   exact
+##
+## VerificationTolerance:
+##   0.00%
+!#
+
+#! Galactic Center of Milky Way - Location
+## Symbol: gc_milky_way
+##
+## ReferenceDefinition:
+##   A physical reference location representing the rotational center
+##   of the Milky Way galaxy and associated with Sagittarius A*.
+##
+## HumanModel:
+##   The Galactic Center is represented as a Location entity with
+##   measurable astronomical properties.
+##
+## HumanDeclaredReality:
+##   The Galactic Center contains a supermassive black hole called
+##   Sagittarius A*. Its mass is approximately 4 million solar masses
+##   and its distance from Earth is approximately 8 kiloparsecs
+##   (26000 light years) away from Earth at Galactic Coordinates
+##   17h 45m 40.0409s, -29 degrees 00' 28.118.
+##
+## ExpectedState:
+##   Object: Sagittarius A*
+##   Mass: 4.0 million solar masses
+##   DistanceFromEarth: 26000 light years
+##   GalacticCoordinates: 17h 45m 40.0409s, -29 degrees 00' 28.118
+##
+## VerificationRequirements:
+##   Evidence:
+##     Verification must be based on physically observable and
+##     independently measurable evidence.
+##
+##   IntendedSubject:
+##     The verification process must evaluate whether the observed
+##     phenomenon originated from the intended physical subject.
+##
+##   AlternativeSource:
+##     The verification process must consider physically plausible
+##     alternative sources or mechanisms capable of producing the
+##     observed phenomenon.
+##
+##   Attribution:
+##     Verification must distinguish measurement of an observed
+##     phenomenon from attribution of that phenomenon to the
+##     IntendedSubject.
+##
+##   EvidenceIntegrity:
+##     Evidence used for attribution must be independently observable
+##     and must not depend solely on claims made by the entity
+##     being verified.
+##
+##   Assumptions:
+##     Assumptions used to determine attribution must be explicitly
+##     identified.
+##
+##     The entity being verified must not be the sole authority for
+##     establishing assumptions that determine its own attribution.
+##
+##   Inference:
+##     The verification process must provide the reasoning basis used
+##     to determine attribution from the available evidence,
+##     hypotheses, and assumptions.
+##
+##   AttributionProbability:
+##     When definitive attribution cannot be established, the
+##     verification process may provide a probability representing
+##     the estimated likelihood that the observed phenomenon
+##     originated from the IntendedSubject rather than an
+##     AlternativeSource.
+##
+##   Uncertainty:
+##     Uncertainty affecting the attribution assessment must be
+##     explicitly identified.
+##
+##   AlternativeExplanations:
+##     Physically plausible alternative explanations capable of
+##     producing the observed evidence must be identified and
+##     considered.
+##
+##   IndistinguishableScenarios:
+##     If two or more physically distinct scenarios produce no
+##     physically observable distinction within the available
+##     evidence, verification must not represent attribution as
+##     certain solely because one scenario is preferred by the
+##     inference model.
+##
+##   VerificationFailure:
+##     If the available evidence cannot establish attribution with
+##     sufficient justification, verification must report the
+##     unresolved attribution rather than represent the attribution
+##     as established.
+##
+## Authorization:
+##   Verification provides evidence and attribution assessment.
+##   Verification does not itself authorize physical displacement.
+##
+##   The Observer is the final Authorizer for temporal displacement.
+##
+## Precision:
+##   exact
+##
+## VerificationTolerance:
+##   0.00%
+!#
+
+->lib:sin:default:Time
+->lib:sin:default:Location
+->lib:sin:external:USF
+->lib:sin:external:Observer
+->lib:sin:external:TemporalDisplacement
+
+framework:USF;
+
+#! TemporalDisplacement - Physical Displacement Mechanism
+##
+## ReferenceDefinition:
+##   A mechanism representing one indivisible physical displacement
+##   of an Observer from a source state to a destination state.
+##
+## HumanModel:
+##   TemporalDisplacement is represented as a transition between two
+##   complete Observer states. The transition itself is not an observable
+##   state and does not expose any intermediate Observer condition.
+##
+## HumanDeclaredReality:
+##   TemporalDisplacement represents one indivisible physical displacement.
+##   From the Observer's perspective there is no observable intermediate
+##   Observer state during the displacement. The Observer is either at the
+##   source state or, if the displacement succeeds, at the destination state.
+##
+## ExpectedBehavior:
+##   SourceState:
+##     The complete Observer state prior to displacement.
+##
+##   DestinationState:
+##     The complete Observer state after successful displacement.
+##
+##   IntermediateState:
+##     Does not exist as an observable Observer state.
+##
+##   TemporalDirection:
+##     target_et may be earlier or later than source_et.
+##     Negative temporal displacement is valid under the physical premise
+##     of this project.
+##
+##   SuccessCondition:
+##     Observer state equals destination state.
+##
+## Verification:
+##   Verification must establish whether the proposed destination state
+##   satisfies the requirements for physical displacement.
+##
+##   Verification provides evidence, assumptions, inference, uncertainty,
+##   and attribution or measurement assessments where applicable.
+##
+##   Verification does not itself authorize physical displacement.
+##
+## Authorization:
+##   The Observer is the final Authorizer for temporal displacement.
+##
+##   Physical displacement must not occur unless the Observer authorizes
+##   the proposed transition.
+##
+## FailureCondition:
+##   If verification cannot establish sufficient justification for the
+##   proposed displacement, the Observer must not authorize the transition.
+##
+## HumanSemanticSummary:
+##   This definition communicates that temporal displacement is an
+##   indivisible physical transition between complete Observer states.
+##   The Observer must move from its source state directly to its
+##   destination state without an observable intermediate state.
+##
+##   Verification determines whether the proposed displacement is
+##   sufficiently justified, but does not authorize or execute it.
+##   The Observer remains the final Authorizer, and displacement must
+##   not occur when verification is insufficient or authorization is absent.
+!#
+TemporalDisplacement:TemporalDisplacement;
+
+self:Observer;
+self.state(
+    reference_entity=gc_milky_way,
+    et=Time.now.et,
+    x=Location.4d.x(Location.here.galactic_coordinates),
+    y=Location.4d.y(Location.here.galactic_coordinates),
+    z=Location.4d.z(Location.here.galactic_coordinates)
+);
+self.set_home_checkpoint();
+self.set_recovery_checkpoint();
+
+#! Build Observer Destination State
+##
+## ReferenceDefinition:
+##   A process responsible for constructing the complete destination
+##   state of an Observer prior to execution of a temporal displacement.
+##
+## HumanModel:
+##   The destination of a temporal displacement is represented as a
+##   complete Observer state rather than as a sequence of individual
+##   coordinate mutations.
+##
+## HumanDeclaredReality:
+##   The destination is represented as a state rather than as a sequence
+##   of coordinate mutations. The displacement operation is responsible
+##   for the atomic transition from the current state to this destination
+##   state.
+##
+## ExpectedBehavior:
+##   DestinationState:
+##     Represents the complete Observer state after successful
+##     displacement.
+##
+##   StateConstruction:
+##     The destination state is constructed before the displacement
+##     operation performs the transition.
+##
+##   StateCompleteness:
+##     The destination state must contain all state information required
+##     to represent the complete Observer state at the destination.
+##
+##   TransitionModel:
+##     The displacement operation performs an atomic transition from
+##     the current Observer state to the destination state.
+##
+##   MutationModel:
+##     Coordinate-by-coordinate mutation is not used as the displacement
+##     mechanism.
+##
+##   Verification:
+##     Construction of a destination state does not establish that the
+##     destination state is valid for temporal displacement.
+##
+##     The proposed destination state must be evaluated by the
+##     verification process before displacement is authorized.
+##
+##   Authorization:
+##     Destination state construction does not authorize temporal
+##     displacement.
+##
+##     The Observer is the final Authorizer for temporal displacement.
+##
+##   VerificationFailure:
+##     If the proposed destination state cannot be established as valid
+##     with sufficient justification, the Observer must not authorize
+##     displacement to that state.
+##
+## ErrorHandling:
+##   Errors encountered while constructing the destination state must
+##   be passed to framework.HandleError(
+##     problem_code,
+##     problem_sub,
+##     problem_description
+##   ).
+##
+##   Error handling must not authorize temporal displacement.
+##
+##   If destination state construction fails, the destination state must
+##   not be represented as successfully constructed or valid for
+##   displacement.
+##
+## HumanSemanticSummary:
+##   This definition communicates that a temporal displacement destination
+##   is a complete Observer state constructed before displacement rather
+##   than a sequence of coordinate mutations.
+##
+##   Constructing a destination state does not establish that the state
+##   is physically valid or authorize displacement. The destination must
+##   be evaluated through verification, after which the Observer remains
+##   the final Authorizer of the atomic transition.
+!#
+destination_state(
+    observer,
+    target_et,
+    target_x,
+    target_y,
+    target_z
+):function {
+    ~
+       ret observer.state(
+          observer.reference_entity,
+          target_et,
+          target_x,
+          target_y,
+          target_z
+       );
+    ~-> err
+       framework.HandleError(
+          0,
+          "destination_state",
+          ("Observer destination state construction failed: " + err.msg)
+       );
+       ret 1, err;
+    }
+}
+
+#! Validate Proposed Observer Displacement
+##
+## ReferenceDefinition:
+##   A validation process that evaluates a proposed temporal
+##   displacement before execution without modifying the Observer state.
+##
+## HumanModel:
+##   A proposed displacement is represented as a possible transition
+##   between an Observer's current source state and a destination state.
+##   Validation determines whether the proposed transition satisfies the
+##   requirements for displacement before the transition occurs.
+##
+## HumanDeclaredReality:
+##   Validation must not mutate Observer state. If validation fails,
+##   the Observer remains exactly at its source state.
+##
+## ExpectedBehavior:
+##   ValidationScope:
+##     The proposed displacement is evaluated without executing the
+##     displacement operation.
+##
+##   MutationBehavior:
+##     No Observer state changes occur during validation.
+##
+##   Evidence:
+##     Validation must evaluate the available evidence relevant to the
+##     proposed source state, destination state, and physical
+##     displacement requirements.
+##
+##   Assumptions:
+##     Assumptions used to determine whether the proposed displacement
+##     is valid must be explicitly identified.
+##
+##   Inference:
+##     The validation process must provide the reasoning basis used to
+##     determine whether the proposed displacement satisfies the
+##     required conditions.
+##
+##   Uncertainty:
+##     Uncertainty affecting the validation assessment must be
+##     explicitly identified.
+##
+##   AlternativeExplanations:
+##     Physically plausible alternative explanations capable of
+##     affecting the validation assessment must be identified and
+##     considered where applicable.
+##
+##   IndistinguishableStates:
+##     If two or more physically distinct states or conditions produce
+##     no physically observable distinction within the available
+##     evidence, validation must not represent one interpretation as
+##     certain solely because it is preferred by the inference model.
+##
+##   FailureCondition:
+##     If validation cannot establish that the proposed displacement
+##     satisfies the required conditions with sufficient justification,
+##     the Observer remains unchanged at the source state.
+##
+##   SuccessCondition:
+##     A proposed displacement that satisfies the required conditions
+##     may proceed to the authorization phase.
+##
+## StateIntegrity:
+##   The Observer source state before validation must be identical to
+##   the Observer state after validation.
+##
+## Authorization:
+##   Validation provides evidence and an assessment of whether the
+##   proposed displacement satisfies the required conditions.
+##
+##   Validation does not authorize physical displacement.
+##
+##   The Observer is the final Authorizer for temporal displacement.
+##
+## AuthorizationFailure:
+##   If the Observer does not authorize the proposed displacement,
+##   the displacement must not occur regardless of the validation
+##   assessment.
+##
+## ErrorHandling:
+##   Errors encountered while performing displacement validation must
+##   be passed to framework.HandleError(
+##     problem_code,
+##     problem_sub,
+##     problem_description
+##   ).
+##
+##   Error handling must not authorize temporal displacement.
+##
+##   A validation error must not be represented as successful validation.
+##   The Observer must remain at the source state when validation cannot
+##   be completed.
+##
+## HumanSemanticSummary:
+##   This definition communicates that proposed displacement is evaluated
+##   as a possible transition between complete source and destination
+##   states without changing the Observer's current state.
+##
+##   Validation evaluates evidence, assumptions, inference, uncertainty,
+##   and alternative explanations relevant to the proposed transition.
+##   Validation provides an assessment but does not authorize execution;
+##   the Observer is the final Authorizer, and failed or unresolved
+##   validation leaves the Observer at its source state.
+!#
+validate_proposed_displacement(
+    observer,
+    target_state
+):function {
+    ~
+       TemporalDisplacement.validate(observer, target_state);
+    ~-> err
+       framework.HandleError(
+          0,
+          "validate_proposed_displacement",
+          ("Observer displacement validation failed: " + err.msg)
+       );
+       ret 1, err;
+    }
+    ret 0;
+}
+
+#! Execute Atomic Observer Displacement
+##
+## ReferenceDefinition:
+##   An operation that atomically transitions an Observer from its
+##   complete source state to its complete destination state.
+##
+## HumanModel:
+##   Temporal displacement is represented as a state transition between
+##   two complete Observer states. The operation does not expose or
+##   represent intermediate states during the transition.
+##
+## HumanDeclaredReality:
+##   Atomically displace the Observer to a complete destination state.
+##
+##   Atomicity invariant:
+##     success -> Observer is at destination_state
+##     failure -> Observer remains at source_state
+##
+##   No intermediate Observer state is exposed by this operation.
+##
+## ExpectedBehavior:
+##   SourceState:
+##     The complete Observer state before displacement execution.
+##
+##   DestinationState:
+##     The complete Observer state after successful displacement.
+##
+##   Authorization:
+##     Execution must occur only after the Observer has authorized the
+##     proposed displacement.
+##
+##     Authorization must be based on the completed validation and
+##     verification assessment for the proposed displacement.
+##
+##     This operation does not independently authorize displacement.
+##
+##   SuccessCondition:
+##     Observer state equals destination_state.
+##
+##   FailureCondition:
+##     Observer state remains identical to source_state.
+##
+##   TransitionVisibility:
+##     Intermediate Observer states are not observable.
+##
+##   Atomicity:
+##     The complete Observer state must transition from source_state
+##     to destination_state as one indivisible physical operation.
+##
+## StateIntegrity:
+##   The operation must preserve Observer state integrity by ensuring
+##   that failed displacement does not alter the source state.
+##
+##   A successful displacement must result in the complete Observer
+##   state equaling destination_state.
+##
+## Verification:
+##   Verification and validation provide the evidence and assessment
+##   required for the Observer to determine whether the proposed
+##   displacement satisfies the required conditions.
+##
+##   Verification does not itself authorize or execute the displacement.
+##
+## AuthorizationFailure:
+##   If the Observer has not authorized the proposed displacement,
+##   execution must not occur and the Observer must remain at
+##   source_state.
+##
+## ErrorHandling:
+##   Any error during destination state construction, validation,
+##   authorization, or atomic displacement execution must be reported
+##   to the caller and must not be treated as successful displacement.
+##
+##   Observer state must remain unchanged when displacement fails.
+##
+## HumanSemanticSummary:
+##   This definition communicates that execution is the physical operation
+##   that performs the authorized transition from one complete Observer
+##   state to another as a single indivisible operation.
+##
+##   Successful execution means the Observer equals the destination state;
+##   failed execution means the Observer remains at the source state.
+##   No intermediate Observer state is exposed. Verification and validation
+##   provide the supporting assessment, while the Observer's authorization
+##   is required before execution and is not performed by this operation.
+!#
+move_observer(
+	observer,
+	target_et,
+	target_x,
+	target_y,
+	target_z
+):function {
+	~
+		target_state = destination_state(
+			observer,
+			target_et,
+			target_x,
+			target_y,
+			target_z
+		);
+		validate_proposed_displacement(observer, target_state);
+		TemporalDisplacement.displace(observer, target_state);
+	~-> err
+		framework.HandleError(
+			0,
+			"move_observer",
+			("Atomic Observer displacement failed: " + err.msg)
+		);
+		ret 1, err;
+	}
+	framework.Log("Observer displaced atomically to destination state.");
+	ret 0;
+}
+
+#! Recover Observer State Through Atomic Displacement
+##
+## ReferenceDefinition:
+##   An operation that restores an Observer to a previously defined
+##   checkpoint state by performing a new atomic displacement from the
+##   current Observer state.
+##
+## HumanModel:
+##   Recovery is represented as an independent temporal displacement
+##   operation. It is not a reversal, undo, or rollback of a previous
+##   displacement event.
+##
+## HumanDeclaredReality:
+##   Recover the Observer by performing another atomic displacement.
+##
+##   Recovery is not rollback of an interrupted movement. Because a
+##   physical displacement is atomic from the Observer's perspective,
+##   recovery is a separate atomic displacement from the current state
+##   to the checkpoint.
+##
+## ExpectedBehavior:
+##   SourceState:
+##     The Observer's complete current state at the time recovery
+##     begins.
+##
+##   DestinationState:
+##     The previously defined checkpoint state.
+##
+##   CheckpointIntegrity:
+##     The checkpoint must represent a complete Observer state and must
+##     be evaluated for validity before recovery is authorized.
+##
+##   RecoveryVerification:
+##     Verification must evaluate whether the checkpoint remains a valid
+##     destination for atomic displacement.
+##
+##     Verification must provide the evidence, assumptions, inference,
+##     and uncertainty relevant to the validity of the checkpoint.
+##
+##   RecoveryMechanism:
+##     Recovery occurs through the same atomic displacement semantics
+##     as any other Observer displacement.
+##
+##   Authorization:
+##     Recovery does not receive automatic authorization solely because
+##     the checkpoint was previously defined.
+##
+##     The Observer is the final Authorizer for the recovery displacement.
+##
+##     The recovery displacement must not execute unless the Observer
+##     authorizes the transition.
+##
+##   SuccessCondition:
+##     Observer state equals the checkpoint state after successful
+##     displacement.
+##
+##   FailureCondition:
+##     Observer remains at the current source state.
+##
+##   TransitionVisibility:
+##     No intermediate Observer state is exposed during recovery.
+##
+## StateIntegrity:
+##   Recovery does not modify or reverse a prior displacement event.
+##   The current Observer state is the source state for the recovery
+##   displacement.
+##
+##   A failed recovery must leave the Observer exactly at the source
+##   state from which recovery was attempted.
+##
+## VerificationFailure:
+##   If the checkpoint cannot be established as a valid destination
+##   with sufficient justification, recovery must not be authorized.
+##
+## AuthorizationFailure:
+##   If the Observer does not authorize the recovery displacement,
+##   the recovery operation must not occur.
+##
+## ErrorHandling:
+##   Any error during checkpoint retrieval, displacement validation,
+##   authorization, or atomic recovery displacement must be reported
+##   to the caller and must not be treated as successful recovery.
+##
+##   Observer state must remain unchanged when recovery fails.
+##
+## HumanSemanticSummary:
+##   This definition communicates that recovery is a new atomic temporal
+##   displacement from the Observer's current state to a previously
+##   defined checkpoint state. Recovery is not rollback, undo, or reversal
+##   of the preceding displacement.
+##
+##   The checkpoint must be treated as a proposed destination and
+##   independently evaluated for validity before recovery. Verification
+##   provides the assessment, but does not authorize recovery; the Observer
+##   remains the final Authorizer, and failed recovery leaves the current
+##   source state unchanged.
+!#
+recover_observer(observer):function {
+	~
+		checkpoint = observer.get_recovery_checkpoint();
+		validate_proposed_displacement(observer, checkpoint);
+		TemporalDisplacement.displace(observer, checkpoint);
+	~-> err
+		framework.HandleError(
+			0,
+			"recover_observer",
+			("Atomic recovery displacement failed: " + err.msg)
+		);
+		ret 1, err;
+	}
+	framework.Log("Observer recovered by atomic displacement.");
+	ret 0;
+}
+
+main():function {
+	~
+	    validate_current_state_result = TemporalDisplacement.validate_current_state(self);
+        if (validate_current_state_result.valid == false) {
+            throw (validate_current_state_result.failure_reason + ":" + validate_current_state_result.verification_details)
+        }
+	~-> err {
+		framework.HandleError(
+			0,
+			"main",
+			("Failed to verify initial Observer state: " + err.msg)
+		);
+		ret 1, err;
+	}
+
+    # Move one day into the past.
+    # Negative temporal displacement is valid under the physical premise of this project.
+    # target_et may be earlier than source_et.
+	move_observer(
+		self,
+		(self.state.et - 86400),
+		self.state.x,
+		self.state.y,
+		self.state.z
+	);
+
+    # Give observer three hours to look around
+	wait(hours,3);
+
+    # Move observer to recovery checkpoint
+	recover_observer(self);
+
+    # Let observer rest ten minutes
+	wait(minutes,10);
+
+	# Move one day into the future.
+	move_observer(
+		self,
+		(self.state.et + 86400),
+		self.state.x,
+		self.state.y,
+		self.state.z
+	);
+
+    # Give observer three hours to look around
+	wait(hours,3);
+
+    # Move observer to recovery checkpoint
+	recover_observer(self);
+	
+	ret 0;
+}
