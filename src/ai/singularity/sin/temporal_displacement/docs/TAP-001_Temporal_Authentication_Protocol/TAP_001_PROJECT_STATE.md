@@ -4,8 +4,8 @@
 **Designation:** TAP-001  
 **Document:** `TAP_001_PROJECT_STATE.md`  
 **Status:** Working project-state artifact  
-**Revision:** v27  
-**Purpose:** Consolidated statement of the current TAP-001 architecture, frozen decisions, cryptographic lifecycle, optional historical-secret commitment, evidence model, completed Steps 6–15, current Step 16 specification work, and remaining open design questions.
+**Revision:** v28  
+**Purpose:** Consolidated statement of the current TAP-001 architecture, frozen decisions, cryptographic lifecycle, optional historical-secret commitment, evidence model, completed Steps 6–15, current Step 16 specification work, and next-step development of trust establishment and a temporally authenticated computational channel.
 
 ---
 
@@ -3824,3 +3824,273 @@ OPEN WORK REMAINING
 ```
 
 The v27 clarification is now the active project-state interpretation of the D079 private-key lifecycle. It supersedes any earlier active wording that treated the future private encryption key as separately provisioned without stating that it shares the same physical medium as the historical private signing key. Historical revision sections remain retained for traceability and are not current state.
+
+
+# 31. Next Steps for Protocol Development — v28
+
+The following design direction was identified after the v27 clarification of the D079
+key-bearing medium and is now recorded as **proposed next-step protocol development**.
+It does not silently modify or replace any frozen D001–D018 definitions.
+
+## 31.1 Trust Establishment Following Initial Temporal Authentication
+
+The current D079 mechanism establishes an authenticated temporal contact using the
+historical cryptographic material described by the existing protocol.
+
+A new capability is now proposed to operate **after** that initial temporal contact:
+
+1. Singularity processes an HSIE and obtains the historical private signing key and
+the associated secret/private encryption material from the physical medium as
+specified by the D079 lifecycle.
+2. Singularity uses temporal displacement to send the historical private signing key
+and secret/private encryption material to the recipient in the past.
+3. The transfer also contains the material required for the historical recipient to
+authenticate the transferred material and establish its provenance within TAP.
+4. The historical recipient thereby obtains the cryptographic material associated
+with the previously established temporal relationship.
+5. The recipient uses that material and the required authentication evidence to create
+a **new HSIE**.
+6. The new HSIE records establishment of an ongoing cryptographic trust relationship
+between the historical recipient and Singularity.
+
+This new HSIE is conceptually distinct from the original HSIE. The original HSIE
+records the bounded historical event involving the designated authentication material.
+The subsequent HSIE records the later establishment of persistent trust using material
+obtained through the authenticated temporal relationship.
+
+The new mechanism should therefore initially be treated as a **trust-establishment
+layer above the original temporal-authentication mechanism**, rather than as an
+immediate modification of D079.
+
+## 31.2 Trust Establishment Is Not Repeated Temporal Authentication
+
+The purpose of the proposed trust-establishment mechanism is to avoid requiring the
+full temporal-authentication and scientific-validation process for every subsequent
+message encrypted using the original secret authentication material.
+
+The architectural distinction is:
+
+```text
+TEMPORAL AUTHENTICATION
+        │
+        ▼
+TRUST ESTABLISHMENT
+        │
+        ▼
+TRUST-ESTABLISHMENT HSIE
+        │
+        ▼
+TEMPORALLY AUTHENTICATED COMPUTATIONAL CHANNEL
+```
+
+The initial temporal-authentication process establishes the trust anchor. The new
+HSIE records establishment of the continuing cryptographic relationship. Subsequent
+communication can then use that established relationship rather than independently
+re-establishing the original temporal claim for every message.
+
+This preserves the distinction between:
+
+- **Temporal-contact confidence:** whether the original claimant has been
+  authenticated through TAP's temporal-authentication process; and
+- **Cryptographic-session confidence:** whether a subsequent message was produced by
+  the party with whom the authenticated relationship was previously established and
+  whether the message remained cryptographically intact.
+
+The latter is not intended to constitute a new proof of temporal displacement for every
+message. It is authentication within an already established trust relationship.
+
+## 31.3 Temporally Authenticated Computational Channel
+
+The deeper architectural consequence is that TAP may evolve from a protocol concerned
+primarily with authenticating isolated temporal messages into a protocol capable of
+establishing a **temporally authenticated computational channel**.
+
+The proposed operational model is:
+
+```text
+Initial temporal contact
+        │
+        ▼
+Scientific / experimental validation
+        │
+        ▼
+Temporal authentication established
+        │
+        ▼
+Transfer of historical cryptographic material
+        │
+        ▼
+Trust-establishment HSIE
+        │
+        ▼
+Persistent cryptographic relationship
+        │
+        ├──► messages
+        ├──► computation requests
+        ├──► computational results
+        ├──► follow-up messages
+        └──► additional computation
+```
+
+The important architectural principle is:
+
+> **Temporal authentication establishes the channel; cryptography operates the channel.**
+
+Under this model, the expensive scientific-validation process becomes a bootstrap
+mechanism for establishing the temporal relationship rather than a mandatory delay
+before every subsequent computational exchange.
+
+This distinction is particularly important for computational workflows in which a
+recipient may need to execute an experiment, calculation, simulation, or other
+operation and return the result. Once the trust relationship has been established,
+those exchanges can potentially occur through the persistent cryptographic channel
+without repeating the original temporal-authentication procedure each time.
+
+## 31.4 Proposed Architectural Layers
+
+For subsequent protocol development, TAP should be considered as having at least
+three conceptual layers:
+
+### Layer 1 — Temporal Authentication
+
+Establishes the authenticity of the temporal claimant and the relationship to the
+historical cryptographic material under the existing TAP mechanisms.
+
+### Layer 2 — Trust Establishment
+
+Transfers the historical cryptographic material back to the historical recipient and
+creates a new HSIE documenting the establishment of the continuing cryptographic
+relationship.
+
+### Layer 3 — Temporally Authenticated Computational Channel
+
+Uses the trust-establishment HSIE as the trust anchor for subsequent authenticated
+and/or encrypted messages, computation requests, and computational results.
+
+The third layer does not replace the first two. It is a capability made possible by
+them.
+
+## 31.5 Key-Role Precision Required
+
+The new design must preserve the distinction among cryptographic roles already
+established in TAP-001:
+
+- historical private signing key → signing/authentication function;
+- secret/private encryption material → encryption/decryption function according to
+the defined cryptographic profile;
+- public verification material → verification of signatures;
+- other public encryption material → encryption to the intended recipient where
+required by the selected encryption construction.
+
+The phrase **"secret authentication material"** should not automatically be expanded
+to mean every cryptographic secret involved in the channel. The current project state
+defines the historical secret authentication material specifically in relation to the
+historical private signing key. The new trust-establishment design should therefore
+introduce precise terminology for the broader collection of cryptographic material
+transferred by Singularity rather than silently changing the meaning of an existing
+frozen term.
+
+## 31.6 D079 Relationship
+
+The current position is to preserve D079 as the mechanism for the initial
+signed-and-encrypted temporal message exchange.
+
+The proposed trust-establishment capability should initially be modeled as a layer
+that occurs after successful D079-based temporal contact:
+
+```text
+D079
+  │
+  ▼
+authenticated temporal contact
+  │
+  ▼
+key-material transfer to the past
+  │
+  ▼
+trust-establishment HSIE
+  │
+  ▼
+persistent computational channel
+```
+
+D079 should not be modified merely to incorporate this new capability until the new
+layer has been formally defined and its relationship to existing D079 key lifecycle
+semantics has been resolved.
+
+## 31.7 New Protocol Concepts Requiring Formal Definition
+
+The following concepts should be developed before they are treated as frozen TAP
+semantics:
+
+1. **Trust-establishment HSIE** — the formal definition and purpose of the new HSIE
+   created after the recipient receives the historical cryptographic material.
+2. **Trust relationship** — the exact cryptographic and evidentiary meaning of the
+   relationship established by that HSIE.
+3. **Temporally authenticated computational channel** — the formal protocol concept,
+   scope, lifecycle, and termination conditions.
+4. **Transferred cryptographic material** — precise terminology identifying which
+   private and public components may be transferred and what each component enables.
+5. **Channel authentication** — the mechanism by which subsequent messages are
+   authenticated without repeating the original temporal-authentication procedure.
+6. **Channel encryption** — the mechanism by which subsequent messages are protected,
+   including explicit identification of sender/recipient encryption roles.
+7. **Channel establishment evidence** — the evidence required to demonstrate that the
+   historical recipient legitimately created the new trust-establishment HSIE.
+8. **Key lifecycle after trust establishment** — whether the transferred historical
+   keys remain active, are replaced by derived/session keys, or are otherwise
+   constrained after the new HSIE is established.
+9. **Revocation and termination** — how the continuing relationship can be terminated,
+   invalidated, or replaced.
+10. **Replay and message-order protection** — requirements for subsequent computational
+    exchanges once the channel exists.
+
+## 31.8 Scientific Validation and Ongoing Computation
+
+A principal design objective of this proposed architecture is to separate the cost of
+initial temporal validation from the operational cost of subsequent communication and
+computation.
+
+The intended model is not that every message is independently supported by a new set
+of scientific experiments. Instead:
+
+```text
+scientific validation
+        ↓
+initial temporal authentication
+        ↓
+trust establishment
+        ↓
+continuing cryptographic operation
+```
+
+The protocol must nevertheless retain a clear distinction between cryptographic
+assurance within the established channel and independent scientific evidence bearing
+on the underlying temporal-displacement claim. Establishing a persistent cryptographic
+channel does not, by itself, transform subsequent messages into independent scientific
+proof of temporal displacement.
+
+## 31.9 Immediate Next Development Tasks
+
+The next protocol-design work should therefore focus on:
+
+- defining the trust-establishment HSIE without altering frozen HSIE semantics;
+- defining the transferred-key-material model and terminology;
+- defining how the historical recipient authenticates the transferred material;
+- defining the precise cryptographic relationship established by the new HSIE;
+- defining the lifecycle of the resulting computational channel;
+- defining authentication and encryption requirements for subsequent messages;
+- determining whether long-lived channel keys or derived/session keys are appropriate;
+- defining replay, ordering, expiration, revocation, and termination behavior;
+- determining what evidence remains necessary when a channel is used for scientific or
+  computational work; and
+- only after those definitions are stable, determining whether D079 requires a formal
+  amendment or whether the new mechanism should remain a separate TAP architectural
+  capability.
+
+### v28 status
+
+This entire section is **proposed next-step protocol development**, not frozen protocol
+semantics. No D001–D018 definition is changed by this revision. The v27 D079
+key-bearing-medium clarification remains active and is preserved above in the
+revision history.
