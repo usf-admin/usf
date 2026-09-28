@@ -1,6 +1,6 @@
 # 1. Project Purpose
 
-TAP is a protocol for evaluating a future entity that claims to have established contact with the present through temporal displacement.
+Temporal Authentication Protocol (TAP) evaluates a future entity that claims to have established contact with the present through temporal displacement.
 
 The protocol deliberately separates three questions:
 
@@ -172,10 +172,10 @@ The intended architecture of a SAFE TRANSITION LOCATION (STL) is:
 - Inner opaque cube (10' x 10' x 10') is the controlled room containing the secret material.
 - The secret material is placed inside the inner room and the room is then sealed.
 - **Independent observers remain outside the transparent enclosure** and can continuously observe the inner room's accessible entrance.
-- During the defind observation interval, witnesses can document that **nobody entered the inner room**.
+- During the defined observation interval, witnesses can document that **nobody entered the inner room**.
 - At the end of the interval, the sealed room can be opened under the prescribed HSIE procedure, with custody and subsequent destruction of the secret material documented.
 ***
-The evidentary chain is closer to:
+The evidential chain is closer to:
 
 **public location → observable enclosure → controlled room → secret instantiated → room sealed → independently observed non-entry interval → subsequent controlled access/destruction**
 
@@ -188,11 +188,11 @@ It is a **protocol role**, rather than a particular kind of ownership or access 
 - Temporary/dedicated STL: a suitable enclosure established for a particular HSIE or event.
 - Location-independent: the STL can potentially be established anywhere that satisfies the applicable physical and observational requirements.
 
-In particular, the **transparent outer enclosure is useful because it creates an independently observable access boundary around the opaque inner room.** A private STL could provide exactly the same evidentiary function as a public one, provided the relevant observation and custody requirements are satisfied.
+In particular, the **transparent outer enclosure is useful because it creates an independently observable access boundary around the opaque inner room.** A private STL could provide exactly the same evidential function as a public one, provided the relevant observation and custody requirements are satisfied.
 ***
 ![TAP-001_SafeTransitionLocation](images/TAP-001_SafeTransitionLocation_Branded.png)
 ***
-TAP-001 does not prescribe **where it is, who owns it, or who operates it.**
+TAP does not prescribe **where it is, who owns it, or who operates it.**
 
-**STL is a functional designation, not necessarily a building or a standardized physical product.**
+**SAFE TRANSITION LOCATION (STL) is a functional designation, not necessarily a building or a standardized physical product.**
 ***
