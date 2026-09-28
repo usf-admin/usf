@@ -8,10 +8,10 @@ gpg --full-generate-key
 Choose: ECC and Kyber
 Choose: Kyber 1024 (X448)
 Choose: 0
-Enter name
-Enter email
-Enter comment
-Enter passphrase
+Enter name ZEEEN
+Enter email ZEEEN@TAP001.HSIE_GPG_KYBER_1024_X448
+Enter comment OPTIONAL (Could be used as a payload)
+Enter passphrase OPTIONAL (PASSPHRASE MUST BE INCLUDED IN THE HSIE SECRET MATERIAL IF USED!!)
 
 gpg --list-keys
 gpg --list-sigs
@@ -35,5 +35,13 @@ gpg --encrypt --sign --recipient ZEEEN@TAP001.HSIE_GPG_KYBER_1024_X448 TAP001.HS
 
 # decrypt-then-verify
 gpg --decrypt TAP001.HSIE.associated_outgoing_message.message_content.zeeen.gpg
+
+# find then delete private and public keys
+gpg --list-secret-keys
+gpg --delete-secret-key [KeyID]
+gpg --list-secret-keys
+gpg --list-keys
+gpg --delete-key [KeyID]
+gpg --list-keys
 ```
 ---
