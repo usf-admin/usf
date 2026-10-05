@@ -142,7 +142,7 @@ ValidationResult:record {
     verification_details
 }
 
-#! TransitionResult - Record
+#! PhysicalTransitionResult - Record
 ##
 ## ReferenceDefinition:
 ##   An immutable description of the result of attempting the atomic
@@ -254,12 +254,12 @@ DisplacementResult:record {
 !#
 validate_current_state(observer):function:internal {
 
-    # ------------------------------------------------------------
+    #
     # Capture the current state before any validation work.
     #
     # Validation is strictly non-mutating. The captured state is used
     # as a defensive integrity check before returning.
-    # ------------------------------------------------------------
+    #
 
     current_state == observer.state
 
@@ -281,7 +281,7 @@ validate_current_state(observer):function:internal {
         );
     }
 
-    # ------------------------------------------------------------
+    #
     # Layer 3 - State member presence.
     #
     # The current Observer state model requires:
@@ -295,7 +295,7 @@ validate_current_state(observer):function:internal {
     #
     # This deliberately does not use truthiness because explicitly
     # present values such as 0 are valid candidates.
-    # ------------------------------------------------------------
+    #
     if (!defined(current_state.et)) {
         ret ValidationResult(
             valid = false,
@@ -341,7 +341,7 @@ validate_current_state(observer):function:internal {
         );
     }
 
-    # ------------------------------------------------------------
+    #
     # Final non-mutation integrity check.
     #
     # validate_state() must never modify Observer state.
@@ -351,7 +351,7 @@ validate_current_state(observer):function:internal {
     #
     # This does NOT attempt to restore the state because validation
     # itself must not perform state mutation.
-    # ------------------------------------------------------------
+    #
     if (observer.state != current_state) {
         ret ValidationResult(
             valid = false,
@@ -362,12 +362,12 @@ validate_current_state(observer):function:internal {
     }
 
 
-    # ------------------------------------------------------------
+    #
     # State validation succeeded.
     #
     # No physical transition has occurred.
     # The Observer contains a complete and valid current state.
-    # ------------------------------------------------------------
+    #
     ret ValidationResult(
         valid = true,
         failure_reason = null,
@@ -404,12 +404,12 @@ validate_current_state(observer):function:internal {
 !#
 validate_proposed_displacement(observer, target_state):function:internal {
 
-    # ------------------------------------------------------------
+    #
     # Capture the source state before any validation work.
     #
     # Validation is strictly non-mutating. The captured state is used
     # as a defensive integrity check before returning.
-    # ------------------------------------------------------------
+    #
     if (!defined(observer)) {
         ret ValidationResult(
             valid = false,
@@ -440,7 +440,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
     }
 
 
-    # ------------------------------------------------------------
+    #
     # Layer 2 - Source-state completeness.
     #
     # The current Observer state model requires:
@@ -454,7 +454,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
     # separately.
     #
     # Do not mutate or normalize missing values here.
-    # ------------------------------------------------------------
+    #
     if (!defined(source_state.et)) {
         ret ValidationResult(
             valid = false,
@@ -500,12 +500,12 @@ validate_proposed_displacement(observer, target_state):function:internal {
         );
     }
 
-    # ------------------------------------------------------------
+    #
     # Layer 3 - Destination-state completeness.
     #
     # A destination is a complete Observer state. It is not merely a
     # collection of independent coordinate mutations.
-    # ------------------------------------------------------------
+    #
     if (!defined(target_state.et)) {
         ret ValidationResult(
             valid = false,
@@ -551,7 +551,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
         );
     }
 
-    # ------------------------------------------------------------
+    #
     # Layer 4 - Source/destination consistency.
     #
     # The current state model requires both states to have the
@@ -560,7 +560,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
     # A different reference entity is not automatically accepted as a
     # valid displacement because the current model does not yet define
     # cross-reference-frame transformation semantics.
-    # ------------------------------------------------------------
+    #
     if (source_state.reference_entity != target_state.reference_entity) {
         ret ValidationResult(
             valid = false,
@@ -570,7 +570,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
         );
     }
 
-    # ------------------------------------------------------------
+    #
     # Layer 5 - Domain-level displacement validity.
     #
     # Negative temporal displacement is explicitly permitted.
@@ -584,7 +584,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
     # A zero displacement is different. The operation must represent
     # an actual displacement, so an identical source/destination state
     # is rejected.
-    # ------------------------------------------------------------
+    #
     if (
         source_state.et == target_state.et &&
         source_state.x == target_state.x &&
@@ -600,7 +600,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
         );
     }
 
-    # ------------------------------------------------------------
+    #
     # Final non-mutation integrity check.
     #
     # validate_proposed_displacement() must never modify Observer state.
@@ -610,7 +610,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
     #
     # This does NOT attempt to restore the state because validation
     # itself must not perform state mutation.
-    # ------------------------------------------------------------
+    #
     if (observer.state != source_state) {
         ret ValidationResult(
             valid = false,
@@ -620,14 +620,14 @@ validate_proposed_displacement(observer, target_state):function:internal {
         );
     }
 
-    # ------------------------------------------------------------
+    #
     # Validation succeeded.
     #
     # No physical transition has occurred.
     # Negative temporal displacement is allowed.
     # The destination is logically valid under the currently defined
     # state model.
-    # ------------------------------------------------------------
+    #
     ret ValidationResult(
         valid = true,
         failure_reason = null,
@@ -667,6 +667,7 @@ validate_proposed_displacement(observer, target_state):function:internal {
 ##   mechanism-provided opaque evidence.
 !#
 physical_transition(
+    observer,
     source_state,
     destination_state
 ):function:internal -> PhysicalTransitionResult {
@@ -685,6 +686,7 @@ physical_transition(
     ##
 
     ret device_result = TMTE.execute_transition(
+        observer,
         source_state,
         destination_state
     );
@@ -800,6 +802,7 @@ perform_atomic_transition(observer, target_state):function:internal {
     source_state = observer.state;
 
     physical_result = physical_transition(
+        observer,
         source_state,
         target_state
     );

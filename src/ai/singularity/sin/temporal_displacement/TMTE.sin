@@ -1,0 +1,1421 @@
+/* Copyright 2024-2026 Brian J. Zeien
+
+This file is part of Universal Software Framework (a.k.a USF).
+
+USF is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+USF is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with USF.  If not, see <http://www.gnu.org/licenses/>.*/
+
+#! Temporal Metric Translation Engine - Program Definition
+##
+## ReferenceDefinition:
+##   TMTE is the hypothetical physical mechanism responsible for producing,
+##   controlling, and terminating a genuine temporal-spatial transition
+##   between a defined source spacetime state and a defined destination
+##   spacetime state.
+##
+##   The TMTE is a physical-system boundary, not a software operation.
+##   It must establish a physically traversable connection or equivalent
+##   transition geometry between source and destination events rather than
+##   merely changing the Observer's recorded state.
+##
+##   The mechanism may consist of multiple physical subsystems, including
+##   spacetime-field generation, metric shaping, chronometric
+##   synchronization, state transfer, and independent verification.
+##
+## HumanModel:
+##   A human models the TMTE as a machine capable of making a requested
+##   temporal transition physically possible by engineering the spacetime
+##   geometry and causal structure between the source and destination.
+##
+##   The human model does not assume that the transition is a coordinate
+##   change, clock adjustment, software state assignment, or ordinary
+##   spatial movement.
+##
+##   The TMTE is therefore understood as the physical implementation
+##   behind the TemporalDisplacement physical_transition(...) boundary.
+##
+## HumanDeclaredReality:
+##   No physically realized TMTE currently exists within this experiment.
+##
+##   The TMTE is a declared hypothetical physical mechanism used to define
+##   the requirements that a future physical implementation would have to
+##   satisfy.
+##
+##   The existence of a TMTE, a controllable displacement field, an
+##   engineered transition geometry, and the ability to establish a
+##   destination event outside the source event's ordinary future-directed
+##   causal reach are all presently hypothetical.
+##
+##   This declaration does not assert that temporal displacement has been
+##   demonstrated or that the required physics is known.
+##
+## ExpectedBehavior:
+##   Given a valid source state and a physically valid destination state,
+##   the TMTE shall attempt to establish the physical transition between
+##   them.
+##
+##   A successful TMTE operation must:
+##
+##     1. establish the required transition geometry;
+##     2. establish a physically traversable causal connection between
+##        source and destination;
+##     3. preserve the Observer's required physical integrity during
+##        transition;
+##     4. establish the destination state;
+##     5. independently verify the measured destination state;
+##     6. independently reconstruct the relevant causal and temporal
+##        ordering;
+##     7. account for the required energy, momentum, and other conserved
+##        quantities;
+##     8. provide evidence sufficient to distinguish physical transition
+##        from software state mutation, clock manipulation, measurement
+##        error, or another conventional explanation;
+##     9. safely terminate or deactivate the engineered transition
+##        geometry.
+##
+##   The mechanism shall report successful = true only when the physical
+##   transition and the required evidence have been established.
+##
+##   If the mechanism is unavailable, cannot establish the required
+##   transition, or cannot establish the required evidence, it shall not
+##   report successful = true.
+##
+## DefinitionStatus:
+##   HYPOTHETICAL / UNIMPLEMENTED / RESEARCH DEFINITION
+##
+##   The TMTE is currently an architectural and theoretical definition
+##   only. No physical implementation exists in the current experiment.
+##
+##   The current TemporalDisplacement implementation therefore treats
+##   the TMTE as an external technology boundary and reports the physical
+##   mechanism as unavailable.
+##
+##   The definition is intentionally incomplete at the physical-theory
+##   level. The governing displacement physics, transition geometry,
+##   field equations, energy requirements, stability conditions, causal
+##   structure, and physical implementation remain subjects of future
+##   theoretical and experimental work.
+!#
+
+#! Temporal Metric Translation Engine - Interface
+##
+## ReferenceDefinition:
+##   TMTE is the hypothetical physical mechanism responsible for producing,
+##   controlling, and terminating a genuine temporal-spatial transition
+##   between a defined source spacetime state and a defined destination
+##   spacetime state.
+##
+##   The TMTE is a physical-system boundary, not a software operation.
+##   It must establish a physically traversable connection or equivalent
+##   transition geometry between source and destination events rather than
+##   merely changing the Observer's recorded state.
+##
+##   The TMTE may consist of multiple physical subsystems responsible for
+##   generating and controlling the required transition geometry,
+##   synchronizing temporal references, preserving the Observer during
+##   transition, and independently verifying the resulting physical state.
+##
+## HumanModel:
+##   A human models the TMTE as a physical machine capable of making a
+##   requested temporal transition physically possible by engineering
+##   the spacetime geometry and causal structure between a source event
+##   and a destination event.
+##
+##   The TMTE is not modeled as a coordinate assignment, clock
+##   adjustment, software state mutation, or ordinary spatial movement.
+##
+##   The TMTE is the physical implementation behind the
+##   TemporalDisplacement physical_transition(...) boundary.
+##
+##   The software interface requests a physical transition; it does not
+##   itself perform the transition.
+!#
+TMTE:interface {
+    execute_transition(observer, source_state, destination_state):function:external -> DeviceResult
+
+    #! Supporting physical-boundary operations
+    ##
+    ## These operations define the physical-system boundary required by
+    ## execute_transition(). Their implementations are external to SIN and
+    ## are currently hypothetical/unimplemented.
+    !#
+    capture_source_state(observer, source_state):function:abstract -> SourceStateResult
+    verify_destination_state(source_state, destination_state):function:abstract -> DestinationValidationResult
+    establish_chronometric_references(source_state, destination_state):function:abstract -> ChronometricResult
+    calculate_transition_geometry(source_state, destination_state, chronometry):function:abstract -> TransitionGeometryResult
+    establish_field_configuration(transition_geometry):function:abstract -> FieldConfigurationResult
+    verify_transition_geometry(transition_geometry, field_configuration):function:abstract -> TransitionGeometryVerificationResult
+    establish_state_transfer_envelope(observer, source_state, destination_state, transition_geometry):function:abstract -> StateTransferEnvelopeResult
+    open_transition_channel(transition_geometry, state_transfer_envelope):function:abstract -> TransitionChannelResult
+    transfer_observer(observer, source_state, destination_state, transition_channel, state_transfer_envelope):function:abstract -> ObserverTransferResult
+    verify_destination_establishment(observer, destination_state, chronometry):function:abstract -> DestinationVerificationResult
+    verify_causal_transition(source_state, destination_state, transition_geometry, chronometry):function:abstract -> CausalVerificationResult
+    verify_conservation_accounting(source_state, destination_state, field_configuration, transition_geometry):function:abstract -> ConservationResult
+    perform_independent_verification(observer, source_state, destination_state, transition_geometry, chronometry):function:abstract -> IndependentVerificationResult
+    terminate_transition(transition_channel, transition_geometry):function:abstract -> TerminationResult
+    preserve_transition_evidence(source_state, destination_state, chronometry, transition_geometry, field_configuration, transition_channel, observer_transfer, destination_verification, causal_verification, conservation, independent_verification, termination):function:abstract -> TransitionEvidence
+}
+
+#! DeviceResult - Record
+##
+## ReferenceDefinition:
+##   An immutable description of the result returned by the
+##   Temporal Metric Translation Engine after an attempted
+##   physical transition between Observer states.
+##
+## HumanModel:
+##   DeviceResult represents the physical mechanism's report of
+##   whether the requested transition was available, attempted,
+##   and successfully established by the TMTE.
+##
+##   It is a mechanism-level result and is distinct from the
+##   logical atomic-transition result produced by TemporalDisplacement.
+##
+## ExpectedBehavior:
+##   A successful result means that the TMTE reports that the requested
+##   physical transition was successfully established and provides the
+##   physical evidence associated with that result.
+##
+##   A failed result means that the TMTE did not successfully establish
+##   the requested physical transition.
+##
+##   An unavailable result means that the TMTE is not available to
+##   perform the requested transition.
+##
+##   The DeviceResult must not be interpreted by itself as proof that
+##   the Observer reached the destination state. TemporalDisplacement
+##   independently evaluates the mechanism result and its evidence.
+##
+## StateIntegrity:
+##   This record describes the result reported by the physical
+##   mechanism. It does not execute transitions and cannot mutate
+##   Observer state.
+!#
+DeviceResult:record {
+    available
+    successful
+    failure_reason
+    evidence
+}
+
+#! SourceStateResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+SourceStateResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! DestinationValidationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+DestinationValidationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! ChronometricResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+ChronometricResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! TransitionGeometryResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+TransitionGeometryResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! FieldConfigurationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+FieldConfigurationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! TransitionGeometryVerificationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+TransitionGeometryVerificationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! StateTransferEnvelopeResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+StateTransferEnvelopeResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! TransitionChannelResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+TransitionChannelResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! ObserverTransferResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+ObserverTransferResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! DestinationVerificationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+DestinationVerificationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! CausalVerificationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+CausalVerificationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! ConservationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+ConservationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! IndependentVerificationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+IndependentVerificationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! TerminationResult - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+TerminationResult:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+#! TransitionEvidence - Record
+##
+## ReferenceDefinition:
+##   TBD
+##
+## HumanModel:
+##   TBD
+##
+## ExpectedBehavior:
+##   TBD
+##
+## StateIntegrity:
+##   TBD
+!#
+TransitionEvidence:record {
+    valid
+    failure_reason
+    measured_variance
+    verification_details
+}
+
+# Establish the actual physical source condition
+capture_source_state(observer, source_state):function:abstract -> SourceStateResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret SourceStateResult(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to capture source state."
+        );
+    }
+
+    ret SourceStateResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Observer source state captured."
+    );
+}
+
+# Verify that the requested destination is physically well-defined
+verify_destination_state(source_state, destination_state):function:abstract -> DestinationValidationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret DestinationValidationResult(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to verify destination state."
+        );
+    }
+
+    ret DestinationValidationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Observer destination state verified."
+    );
+}
+
+# Establish independent source/destination time references
+establish_chronometric_references(source_state, destination_state):function:abstract -> ChronometricResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret ChronometricResult(
+            valid = false,
+            failure_reason = "Chronometric reference apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to establish chronometric references."
+        );
+    }
+
+    ret ChronometricResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Chronometric references established."
+    );
+}
+
+# Determine the physical transition geometry required (Γ_D) to connect source event p with destination event q.
+calculate_transition_geometry(source_state, destination_state, chronometry):function:abstract -> TransitionGeometryResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret TransitionGeometryResult(
+            valid = false,
+            failure_reason = "Transition geometry calculation apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to calculate transition geometry."
+        );
+    }
+
+    ret TransitionGeometryResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Transition geometry calculated."
+    );
+}
+
+# Establish the required displacement-field and stress-energy configuration. Generate the hypothetical D field and associated configuration.
+establish_field_configuration(transition_geometry):function:abstract -> FieldConfigurationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret FieldConfigurationResult(
+            valid = false,
+            failure_reason = "Transition geometry verification apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to establish field configuration."
+        );
+    }
+
+    ret FieldConfigurationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Field configuration established."
+    );
+
+}
+
+# Verify that the required transition region Gamma_D physically exists and satisfies its required boundary conditions. Establish that Γ_D actually exists with the required properties.
+verify_transition_geometry(transition_geometry, field_configuration):function:abstract -> TransitionGeometryVerificationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret TransitionGeometryVerificationResult(
+            valid = false,
+            failure_reason = "Transition geometry verification apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to verify transition geometry."
+        );
+    }
+
+    ret TransitionGeometryVerificationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Transition geometry verified."
+    );
+}
+
+# Protect/monitor the Observer during transition by establishing the Observer's state-transfer envelope.
+establish_state_transfer_envelope(observer, source_state, destination_state, transition_geometry):function:abstract -> StateTransferEnvelopeResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret StateTransferEnvelopeResult(
+            valid = false,
+            failure_reason = "State transfer envelope apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "State transfer envelope."
+        );
+    }
+
+    ret StateTransferEnvelopeResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "State transfer envelope established."
+    );
+}
+
+# Establish the traversable causal connection and open the physical transition channel.
+open_transition_channel(transition_geometry, state_transfer_envelope):function:abstract -> TransitionChannelResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret TransitionChannelResult(
+            valid = false,
+            failure_reason = "Transition channel apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to open transition channel."
+        );
+    }
+
+    ret TransitionChannelResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Transition channel opened."
+    );
+}
+
+# Perform the actual physical transfer. Transfer the Observer through the physical transition.
+transfer_observer(observer, source_state, destination_state, transition_channel, state_transfer_envelope):function:abstract -> ObserverTransferResult {
+
+    /*
+    Traversable shortcut: a tunnel or wormhole connecting two regions.
+    Metric engineering: altering spacetime geometry so the destination becomes effectively nearby.
+    State transfer: transferring the physical state of the human to matter at the destination.
+    Higher-dimensional displacement: moving through an additional degree of freedom not represented in ordinary three-dimensional space.
+    Unknown nonlocal mechanism: a process that changes the human’s spacetime location without a conventional path.
+    */
+
+    /*
+    Endpoint matching becomes the central problem
+
+    The transfer system would need to match the departure and arrival regions in at least four ways:
+
+    Spatial matching
+
+    The destination must be specified by more than a simple coordinate. The system needs:
+    
+    position+orientation+local velocity.
+
+    Arriving at the correct coordinates but with the wrong velocity could result in an immediate collision with the atmosphere, ground, or surrounding structure.
+
+    Temporal matching
+
+    The destination must be specified relative to an agreed time coordinate or physical event. Because distant simultaneity is frame-dependent, “arrive at Earth in the future” requires defining:
+
+        which Earth frame is being used;
+        which clock or network of clocks establishes arrival time;
+        how gravitational time dilation is handled;
+        and how uncertainty in the arrival time is bounded.
+
+    Gravitational matching
+
+    The destination’s local gravitational field must be known. A transfer into a region with a large gravitational gradient could produce dangerous tidal forces even if the capsule itself has no ordinary velocity.
+
+    Orientation matching
+
+    The capsule’s axes, occupant posture, and local rotation must be controlled. A transfer that preserves position but changes orientation or angular velocity could cause severe injury.
+    */
+
+    /*
+    The transfer boundary must be controlled
+
+    The most important unknown is what happens at the interface between ordinary space and the transfer mechanism.
+
+    A viable system would need to ensure that the transfer boundary does not produce:
+
+        pressure discontinuities;
+        destructive electromagnetic fields;
+        high-energy particle emission;
+        differential acceleration across the body;
+        abrupt changes in gravitational field;
+        thermal shock;
+        or uncontrolled rotation.
+
+    The transfer should ideally behave like a locally smooth transformation:
+
+    xdepartureμ⟶xarrivalμ,
+    xdepartureμ​⟶xarrivalμ​,
+
+    while preserving the body’s local physical state and avoiding large gradients:
+
+    Δabody≈0,ΔTbody≈0,ΔPbody≈0.
+    Δabody​≈0,ΔTbody​≈0,ΔPbody​≈0.
+
+    Here, Δabody
+    Δabody​, ΔTbody
+    ΔTbody​, and ΔPbody
+    ΔPbody​ represent differences in acceleration, temperature, and pressure across the body during the transfer.
+    */
+
+    /*
+    Preserve the human’s physical state
+
+    For a continuous-transfer mechanism, the system would need to preserve:
+
+        the body’s mass distribution;
+        internal stresses;
+        molecular arrangement;
+        electrochemical gradients;
+        blood flow;
+        neural activity;
+        temperature;
+        and orientation.
+
+    For a state-transfer mechanism, the required information is more demanding. It would need to reproduce the relevant biological state at the destination, including the structure and dynamic state of the brain and body.
+
+    A practical specification would require the transfer system to verify:
+
+    mass+energy+momentum+angular momentum+charge+biological continuity.
+
+    The last term is not a standard conservation law, but it represents the requirement that the person remain biologically continuous rather than merely becoming an unrelated reconstruction.
+    */
+
+    /*
+    Add destination-side infrastructure
+
+    A point-to-point transfer system would be much safer if the destination were prepared in advance. The destination facility could provide:
+
+        a receiving chamber;
+        matched pressure and temperature;
+        known gravitational conditions;
+        electromagnetic shielding;
+        radiation protection;
+        orientation and velocity sensing;
+        containment in case of transfer failure;
+        medical stabilization;
+        and a synchronized timing system.
+
+    This is especially important if the vehicle transfers the human into an atmosphere, ocean, building, or moving planetary surface. The receiving chamber should be the final interface with the external environment.
+    */
+
+    /*
+    Navigation becomes spacetime targeting
+
+    Instead of conventional navigation alone, the vehicle would need a spacetime targeting system that predicts:
+
+    (position,time,velocity,orientation,gravity,rotation)arrival.
+
+    It would also need uncertainty bounds:
+
+    δx,δt,δv,δθ,δa.
+
+    The acceptable bounds depend on the destination. For example, arriving several meters from the intended location may be harmless inside a receiving chamber but catastrophic if the arrival region is open air or near a solid surface.
+    /*
+
+    /*
+    Abort and failure modes
+
+    A nontraditional transfer system needs more than ordinary engine shutdown. Possible failure modes include:
+
+        transfer not initiating;
+        transfer ending at the wrong location;
+        transfer ending at the wrong time;
+        partial transfer;
+        duplication or loss of state;
+        destination obstruction;
+        unstable transfer boundary;
+        energy or radiation release;
+        loss of endpoint lock;
+        arrival with velocity or orientation mismatch;
+        failure of the destination habitat.
+
+    The system should therefore include:
+
+        pre-transfer verification;
+        an isolated transfer chamber;
+        no-transfer and return modes;
+        destination confirmation;
+        staged activation;
+        transfer interruption rules;
+        independent timing systems;
+        and post-arrival medical checks.
+
+    */
+
+    /*
+    A. Human habitat
+       Pressure, atmosphere, temperature, medical care, restraints
+
+    B. Local state stabilizer
+       Maintains body orientation, thermal state, pressure, and
+       electrochemical conditions during transfer
+
+    C. Spacetime-transfer generator
+       Produces the unknown displacement, shortcut, or state-transfer process
+
+    D. Endpoint-locking system
+       Selects destination position, time, velocity, orientation, and gravity
+
+    E. Transfer-boundary controller
+       Prevents dangerous gradients in acceleration, pressure, energy, and radiation
+
+    F. Conservation and state monitor
+       Checks mass, energy, momentum, charge, body structure, and biological state
+
+    G. Destination receiver
+       Provides a controlled chamber and compatible environmental conditions
+
+    H. Navigation and timing system
+       Establishes the departure and arrival spacetime relationship
+
+    I. Redundant power and control
+       Supports safe mode, abort, isolation, and medical survival
+
+    J. Verification system
+       Confirms that the arrival is physically and biologically acceptable
+    */
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret ObserverTransferResult(
+            valid = false,
+            failure_reason = "Transfer apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to transfer observer."
+        );
+    }
+
+    ret ObserverTransferResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Observer transferred."
+    );
+}
+
+# Independently establish through measurment that the Observer arrived in the requested physical state.
+verify_destination_establishment(observer, destination_state, chronometry):function:abstract -> DestinationVerificationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret DestinationVerificationResult(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to verify destination establishment."
+        );
+    }
+
+    ret DestinationVerificationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Destination establishment verified."
+    );
+}
+
+# Reconstruct the actual causal/temporal relationship. Independently reconstruct the source/destination causal and temporal relationship.
+verify_causal_transition(source_state, destination_state, transition_geometry, chronometry):function:abstract -> CausalVerificationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret CausalVerificationResult(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to verify causal transition."
+        );
+    }
+
+    ret CausalVerificationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Causal transition verified."
+    );
+}
+
+# Account for the physical stress-energy/momentum budget. Account for the physical energy, momentum, angular momentum, and other relevant conserved quantities.
+verify_conservation_accounting(source_state, destination_state, field_configuration, transition_geometry):function:abstract -> ConservationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret ConservationResult(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to verify conservation accounting."
+        );
+    }
+
+    ret ConservationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Conservation accounting verified."
+    );
+}
+
+# Provide measurements not dependent solely on the TMTE's own claims. Obtain independent physical measurements sufficient to distinguish a genuine transition from conventional explanations such as coordinate reassignment, clock manipulation, measurement error, or software mutation.
+perform_independent_verification(observer, source_state, destination_state, transition_geometry, chronometry):function:abstract -> IndependentVerificationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret IndependentVerificationResult(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to perform independent verification."
+        );
+    }
+
+    ret IndependentVerificationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Independent verification performed."
+    );
+}
+
+# Safely collapse/deactivate Γ_D. Safely terminate the engineered transition geometry.
+terminate_transition(transition_channel, transition_geometry):function:abstract -> TerminationResult {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret TerminationResult(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to terminate transition."
+        );
+    }
+
+    ret TerminationResult(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Transition terminated."
+    );
+}
+
+# Preserve the complete evidence package
+preserve_transition_evidence(source_state, destination_state, chronometry, transition_geometry, field_configuration, transition_channel, observer_transfer, destination_verification, causal_verification, conservation, independent_verification, termination):function:abstract -> TransitionEvidence {
+
+    # Measurement device does not yet exist
+    measurement_result = false
+
+    if (!measurement_result) {
+
+        ret TransitionEvidence(
+            valid = false,
+            failure_reason = "Measurement apparatus does not exist.",
+            measured_variance = null,
+            verification_details = "Failed to preserve transition evidence."
+        );
+    }
+
+    ret TransitionEvidence(
+        valid = true,
+        failure_reason = null,
+        measured_variance = null,
+        verification_details = "Transition evidence preserved."
+    );
+}
+
+#! Temporal Metric Translation Engine - Execution Boundary
+##
+## ReferenceDefinition:
+##   execute_transition() is the physical boundary through which
+##   TemporalDisplacement requests an actual physical temporal-spatial
+##   transition.
+##
+## HumanModel:
+##   The function represents a request to a physical TMTE. The function
+##   does not itself create, simulate, assign, or record temporal
+##   displacement.
+##
+##   The implementation coordinates the physical subsystems represented
+##   by the supporting operations above.
+##
+## ExpectedBehavior:
+##   A successful execution requires all required physical stages and
+##   verification stages to succeed.
+##
+##   The mechanism must not report successful = true merely because a
+##   transition was requested or because a software representation of
+##   the Observer was changed.
+##
+##   If the physical mechanism is unavailable, the operation must return
+##   available = false and successful = false.
+##
+##   If the mechanism is available but any required physical stage fails,
+##   the operation must return successful = false and preserve the
+##   failure information and available evidence.
+##
+##   The logical TemporalDisplacement layer remains responsible for
+##   independently evaluating the DeviceResult and establishing the final
+##   logical transition result.
+!#
+execute_transition(observer, source_state, destination_state):function:external -> DeviceResult {
+
+    ##
+    ## Establish the physical source state.
+    ##
+    source_capture = capture_source_state(observer, source_state);
+
+    if (!source_capture.valid) {
+        ret DeviceResult(
+            available = false,
+            successful = false,
+            failure_reason = source_capture.failure_reason,
+            evidence = source_capture.verification_details
+        );
+    }
+
+    ##
+    ## Verify the requested destination state.
+    ##
+    destination_validation = verify_destination_state(
+        source_state,
+        destination_state
+    );
+
+    if (!destination_validation.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = destination_validation.failure_reason,
+            evidence = destination_validation.verification_details
+        );
+    }
+
+    ##
+    ## Establish independent source and destination
+    ## chronometric references.
+    ##
+    chronometry = establish_chronometric_references(
+        source_state,
+        destination_state
+    );
+
+    if (!chronometry.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = chronometry.failure_reason,
+            evidence = chronometry.verification_details
+        );
+    }
+
+    ##
+    ## Determine the physical transition geometry required
+    ## to connect source event p with destination event q.
+    ##
+    transition_geometry = calculate_transition_geometry(
+        source_state,
+        destination_state,
+        chronometry
+    );
+
+    if (!transition_geometry.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = transition_geometry.failure_reason,
+            evidence = transition_geometry.verification_details
+        );
+    }
+
+    ##
+    ## Establish the required displacement-field and
+    ## stress-energy configuration.
+    ##
+    field_configuration = establish_field_configuration(
+        transition_geometry
+    );
+
+    if (!field_configuration.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = field_configuration.failure_reason,
+            evidence = field_configuration.verification_details
+        );
+    }
+
+    ##
+    ## Verify that the required transition region Gamma_D
+    ## physically exists and satisfies its required boundary
+    ## conditions.
+    ##
+    transition_geometry_verification = verify_transition_geometry(
+        transition_geometry,
+        field_configuration
+    );
+
+    if (!transition_geometry_verification.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = transition_geometry_verification.failure_reason,
+            evidence = transition_geometry_verification.verification_details
+        );
+    }
+
+    ##
+    ## Establish the Observer's state-transfer envelope.
+    ##
+    state_transfer_envelope = establish_state_transfer_envelope(
+        observer,
+        source_state,
+        destination_state,
+        transition_geometry
+    );
+
+    if (!state_transfer_envelope.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = state_transfer_envelope.failure_reason,
+            evidence = state_transfer_envelope.verification_details
+        );
+    }
+
+    ##
+    ## Open the physical transition channel.
+    ##
+    transition_channel = open_transition_channel(
+        transition_geometry,
+        state_transfer_envelope
+    );
+
+    if (!transition_channel.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = transition_channel.failure_reason,
+            evidence = transition_channel.verification_details
+        );
+    }
+
+    ##
+    ## Transfer the Observer through the physical transition.
+    ##
+    observer_transfer = transfer_observer(
+        observer,
+        source_state,
+        destination_state,
+        transition_channel,
+        state_transfer_envelope
+    );
+
+    if (!observer_transfer.valid) {
+        termination = terminate_transition(
+            transition_channel,
+            transition_geometry
+        );
+
+        ##
+        ## Preserve the complete physical evidence package.
+        ##
+        evidence = preserve_transition_evidence(
+            source_state,
+            destination_state,
+            chronometry,
+            transition_geometry,
+            field_configuration,
+            transition_channel,
+            observer_transfer,
+            null,
+            null,
+            null,
+            null,
+            termination
+        );
+
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = observer_transfer.failure_reason,
+            evidence = evidence
+        );
+    }
+
+    ##
+    ## Independently measure and verify the destination state.
+    ##
+    destination_verification = verify_destination_establishment(
+        observer,
+        destination_state,
+        chronometry
+    );
+
+    ##
+    ## Independently reconstruct the source/destination
+    ## causal and temporal relationship.
+    ##
+    causal_verification = verify_causal_transition(
+        source_state,
+        destination_state,
+        transition_geometry,
+        chronometry
+    );
+
+    ##
+    ## Account for the physical energy, momentum, angular
+    ## momentum, and other relevant conserved quantities.
+    ##
+    conservation = verify_conservation_accounting(
+        source_state,
+        destination_state,
+        field_configuration,
+        transition_geometry
+    );
+
+    ##
+    ## Obtain independent physical measurements sufficient
+    ## to distinguish a genuine transition from conventional
+    ## explanations such as coordinate reassignment, clock
+    ## manipulation, measurement error, or software mutation.
+    ##
+    independent_verification = perform_independent_verification(
+        observer,
+        source_state,
+        destination_state,
+        transition_geometry,
+        chronometry
+    );
+
+    ##
+    ## Safely terminate the engineered transition geometry.
+    ##
+    termination = terminate_transition(
+        transition_channel,
+        transition_geometry
+    );
+
+    ##
+    ## Preserve the complete physical evidence package.
+    ##
+    evidence = preserve_transition_evidence(
+        source_state,
+        destination_state,
+        chronometry,
+        transition_geometry,
+        field_configuration,
+        transition_channel,
+        observer_transfer,
+        destination_verification,
+        causal_verification,
+        conservation,
+        independent_verification,
+        termination
+    );
+
+    if (!destination_verification.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = destination_verification.failure_reason,
+            evidence = evidence
+        );
+    }
+
+    if (!causal_verification.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = causal_verification.failure_reason,
+            evidence = evidence
+        );
+    }
+
+    if (!conservation.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = conservation.failure_reason,
+            evidence = evidence
+        );
+    }
+
+    if (!independent_verification.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = independent_verification.failure_reason,
+            evidence = evidence
+        );
+    }
+
+    if (!termination.valid) {
+        ret DeviceResult(
+            available = true,
+            successful = false,
+            failure_reason = termination.failure_reason,
+            evidence = evidence
+        );
+    }
+
+    ##
+    ## The physical mechanism may report success only after the
+    ## physical transition and required independent evidence have
+    ## been established.
+    ##
+    ret DeviceResult(
+        available = true,
+        successful = true,
+        failure_reason = null,
+        evidence = evidence
+    );
+}
